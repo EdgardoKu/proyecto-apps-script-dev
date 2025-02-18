@@ -3,9 +3,16 @@
 
 function FormularioRegistro() {
 
-    const guardarFormulario = (datosFormulario) => {
-        console.log(datosFormulario);
+    const[form] = Form.useForm();
 
+    const guardarFormulario = (datosFormulario) => {
+       
+        const id = v4(); 
+
+        google.script.run.withSuccessHandler(resp => {
+            console.log(resp.titulo); 
+            form.resetFields(); 
+        }).guardarUsuario({id, ...datosFormulario});
 
     }
 
@@ -14,6 +21,7 @@ function FormularioRegistro() {
         <div className="px-20">
             <h2 className="text-center font-bold text-xl my-6">Formulario de Registro</h2>
             <Form
+            form={form}
             onFinish={guardarFormulario}
             layout="vertical">
 
