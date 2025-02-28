@@ -1,9 +1,25 @@
 //<script type="text/jsx">
 
 
-function FormularioRegistro() {
-
+function FormularioRegistro()  {
+    
     const[form] = Form.useForm();
+    const{id} = useParams();
+    const [initialValues, setInitialValues] = useState(undefined);
+
+    useEffect(() => {
+        if (id) {
+          google.script.run
+            .withSuccessHandler(res => {
+              const usuario = JSON.parse(res);
+              console.log(res);
+              setInitialValues(usuario);
+            }).listarUsuarios(id)
+        }
+      }, [])
+
+
+
 
     const guardarFormulario = (datosFormulario) => {
 
@@ -20,10 +36,10 @@ function FormularioRegistro() {
     }
 
 
-    return (
-        <div className="px-20">
-            <h2 className="text-center font-bold text-xl my-6">Formulario de Registro</h2>
+    const Formulario = () => {
+        return(
             <Form
+            initialValues={initialValues}
             form={form}
             onFinish={guardarFormulario}
             layout="vertical">
@@ -62,6 +78,19 @@ function FormularioRegistro() {
                 
 
                     </Form>
+        )
+    }
+
+
+    return (
+        <div className="px-20">
+            <h2 className="text-center font-bold text-xl my-6">Formulario de Registro</h2>
+            {
+                (id && initialValues)
+                    ? <Formulario />
+                    : <Formulario />
+            }
+            
                 </div> 
     )
     }
